@@ -1,0 +1,306 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Result Search - New Horizon College of Engineering</title>
+  <style>
+    body {
+      background: gray;
+      font-family: Arial;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      width: 100%;
+      background: black;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      margin-left: auto;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .spacer {
+      height: 70px;
+    }
+    .box {
+      background: red;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 350px;
+      color: white;
+      margin: 100px auto 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .box h3 {
+      margin-top: 0;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: white;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #333;
+    }
+
+    /* Results Table Styles */
+    .results-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 20px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: none;
+    }
+    .results-container h2 {
+      text-align: center;
+      color: #d32f2f;
+      margin-bottom: 20px;
+    }
+    .status-pass {
+      color: #4caf50;
+      font-weight: bold;
+    }
+    .status-fail {
+      color: #f44336;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #d32f2f;
+      color: white;
+      font-weight: bold;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    .new-result {
+      background-color: #e8f5e8 !important;
+      animation: highlight 2s ease-out;
+    }
+    @keyframes highlight {
+      0% { background-color: #e8f5e8; }
+      100% { background-color: transparent; }
+    }
+    .no-results {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      padding: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <img src="logx.png" alt="Logo" width="100" height="20" style="margin-right: auto;">
+  <div class="nav-links">
+    <a href="newpro.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="join.html">ADMISSION</a>
+    <a href="coursee.html">COURSE</a>
+    <a href="resul.html">RESULT</a>
+  </div>
+</div>
+
+<div class="spacer"></div>
+
+<div class="box">
+  <h3>Result Search</h3>
+
+  <form id="resultForm">
+    <label>Semester</label>
+    <select id="semester" required>
+      <option value="">Select Semester</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+      <option>6</option>
+      <option>7</option>
+      <option>8</option>
+    </select>
+
+    <label>USN</label>
+    <input type="text" id="usn" placeholder="Enter USN (e.g., 1NH20CS001)" required>
+
+    <label>DOB</label>
+    <input type="date" id="dob" required>
+
+    <button type="submit">Search Results</button>
+  </form>
+</div>
+
+<!-- Real-time Results Table -->
+<div class="results-container" id="resultsContainer">
+  <h2>Search Results</h2>
+  <table id="resultsTable">
+    <thead>
+      <tr>
+        <th>USN</th>
+        <th>Semester</th>
+        <th>DOB</th>
+        <th>Subject 1</th>
+        <th>Subject 2</th>
+        <th>Subject 3</th>
+        <th>Average</th>
+        <th>Status</th>
+        <th>Search Time</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <tr>
+        <td colspan="9" class="no-results">No results found. Please search above.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+let searchCount = 0;
+
+document.getElementById('resultForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const semester = document.getElementById('semester').value;
+    const usn = document.getElementById('usn').value.toUpperCase();
+    const dob = document.getElementById('dob').value;
+    
+    // Generate realistic sample marks (40-100)
+    const marks = {
+        subject1: Math.floor(Math.random() * 61) + 40,
+        subject2: Math.floor(Math.random() * 61) + 40,
+        subject3: Math.floor(Math.random() * 61) + 40
+    };
+    
+    // Calculate average and status
+    const average = Math.round((marks.subject1 + marks.subject2 + marks.subject3) / 3);
+    const status = average >= 50 ? 'PASS' : 'FAIL';
+    
+    // Search timestamp
+    const searchTime = new Date().toLocaleString('en-IN', { 
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    // Prepare result data
+    const resultData = {
+        usn: usn,
+        semester: semester,
+        dob: new Date(dob).toLocaleDateString('en-IN'),
+        subject1: marks.subject1,
+        subject2: marks.subject2,
+        subject3: marks.subject3,
+        average: average,
+        status: status,
+        searchTime: searchTime
+    };
+    
+    // Add to table
+    addToResultsTable(resultData);
+    
+    // Reset form
+    this.reset();
+    
+    // Success feedback
+    alert(`Results found for ${usn}! Check the table below.`);
+});
+
+function addToResultsTable(data) {
+    searchCount++;
+    
+    const tableBody = document.getElementById('tableBody');
+    const resultsContainer = document.getElementById('resultsContainer');
+    
+    // Remove no-results row if exists
+    if (tableBody.children[0] && tableBody.children[0].classList.contains('no-results')) {
+        tableBody.innerHTML = '';
+    }
+    
+    // Create new row (newest first)
+    const row = tableBody.insertRow(0);
+    row.classList.add('new-result');
+    
+    // Add cells
+    row.insertCell(0).textContent = data.usn;
+    row.insertCell(1).textContent = `Semester ${data.semester}`;
+    row.insertCell(2).textContent = data.dob;
+    row.insertCell(3).textContent = data.subject1;
+    row.insertCell(4).textContent = data.subject2;
+    row.insertCell(5).textContent = data.subject3;
+    row.insertCell(6).textContent = data.average;
+    
+    const statusCell = row.insertCell(7);
+    statusCell.textContent = data.status;
+    statusCell.className = data.status === 'PASS' ? 'status-pass' : 'status-fail';
+    
+    row.insertCell(8).textContent = data.searchTime;
+    
+    // Show results container
+    resultsContainer.style.display = 'block';
+    
+    // Remove highlight after animation
+    setTimeout(() => {
+        row.classList.remove('new-result');
+    }, 2000);
+    
+    // Smooth scroll to results
+    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
+

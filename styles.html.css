@@ -1,0 +1,68 @@
+/* Universal Selector */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Element Selector */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+/* ID Selector */
+#main-title {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Class Selector */
+.nav-list {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  color: #3498db;
+  margin: 0 15px;
+}
+
+/* Descendant Selector */
+section.content article p {
+  color: #555;
+  margin: 10px 0;
+}
+
+/* Child Selector */
+section.content > article > h2 {
+  font-size: 1.5em;
+  color: #e74c3c;
+}
+
+/* Grouping Selector */
+h1, h2, p {
+  margin-bottom: 10px;
+}
+
+/* Attribute Selector */
+a[href] {
+  font-weight: bold;
+}
+
+/* Pseudo-class Selector */
+.nav-list li a:hover {
+  color: #e67e22;
+}
+
+/* Class-specific styling */
+.highlight {
+  background-color: #ffeaa7;
+  padding: 5px;
+  border-left: 4px solid #fdcb6e;
+}
